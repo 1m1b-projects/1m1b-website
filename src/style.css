@@ -717,3 +717,39 @@ body {
   align-items: center;
 
 } 
+  
+/* Modal Styles */  
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); display: flex; justify-content: center; align-items: center; z-index: 100; opacity: 0; visibility: hidden; transition: all 0.3s ease; }  
+.modal-overlay.active { opacity: 1; visibility: visible; }  
+.modal-content { background: white; border-radius: 1.5rem; width: 90%; max-width: 48rem; max-height: 90vh; overflow-y: auto; position: relative; transform: translateY(20px); transition: all 0.3s ease; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }  
+.modal-overlay.active .modal-content { transform: translateY(0); }  
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: rgba(0,0,0,0.5); color: white; border: none; width: 2.5rem; height: 2.5rem; border-radius: 50%; font-size: 1.5rem; cursor: pointer; display: flex; justify-content: center; align-items: center; transition: background 0.2s; z-index: 10; }  
+.modal-close:hover { background: rgba(0,0,0,0.8); }  
+.modal-image { width: 100%; height: 20rem; object-fit: cover; }  
+.modal-body { padding: 2.5rem; }  
+.modal-date { font-size: 0.875rem; font-weight: 700; color: var(--accent-green-dark); text-transform: uppercase; letter-spacing: 0.05em; display: block; margin-bottom: 0.5rem; }  
+.modal-title { font-size: 2rem; font-weight: 800; color: var(--primary-blue); margin-bottom: 1.25rem; line-height: 1.2; }  
+
+.event-card-img-wrapper {
+  width: 100%;
+  height: 12rem;
+  border: 4px solid var(--primary-blue-light);
+  border-radius: 0.75rem;
+  overflow: hidden;
+  margin: 1.25rem 0;
+}
+.event-card-img-wrapper.green-border { border-color: var(--accent-green); }
+.event-card-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
+
+.newsletter-images-grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 768px) { .newsletter-images-grid { grid-template-columns: 1fr 1fr; } }
+.newsletter-scan {
+  width: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-gray);
+}
