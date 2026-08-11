@@ -443,6 +443,33 @@ body {
 .team-former { opacity: 0.8; transition: opacity 0.3s; }
 .team-former:hover { opacity: 1; }
 
+.execom-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.execom-pill {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--primary-blue-light);
+  color: var(--primary-blue-dark);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 9999px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.execom-pill:hover {
+  background: var(--primary-blue);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(30, 58, 138, 0.2);
+}
+
 /* Internship */
 .intern-hero {
   background-color: var(--accent-green-dark);
