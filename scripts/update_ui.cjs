@@ -106,8 +106,8 @@ const newsletterHtml = `
         <div class="newsletter-images-section" style="margin-top: 5rem;">
           <h3 class="section-title" style="margin-bottom: 2rem;">Full Newsletter</h3>
           <div class="newsletter-images-grid">
-            <img src="imgs/newsletter1.png" alt="Newsletter Page 1" class="newsletter-scan" onerror="this.src='https://placehold.co/800x1131/1e3a8a/ffffff?text=Newsletter+Page+1'" />
-            <img src="imgs/newsletter2.png" alt="Newsletter Page 2" class="newsletter-scan" onerror="this.src='https://placehold.co/800x1131/16a34a/ffffff?text=Newsletter+Page+2'" />
+            <img src="imgs/Events/newsletter1.png" alt="Newsletter Page 1" class="newsletter-scan" onerror="this.src='https://placehold.co/800x1131/1e3a8a/ffffff?text=Newsletter+Page+1'" />
+            <img src="imgs/Events/newsletter2.png" alt="Newsletter Page 2" class="newsletter-scan" onerror="this.src='https://placehold.co/800x1131/16a34a/ffffff?text=Newsletter+Page+2'" />
           </div>
         </div>
       </div>
