@@ -1,3 +1,4 @@
+import { events } from './events-data.js';
 
   // Stats Modal Logic
   const statsTrigger = document.getElementById('stats-trigger');
@@ -143,6 +144,27 @@
     logo.addEventListener('click', () => switchTab('home'));
   }
 
+  // Home hero CTA buttons that jump to another tab
+  document.querySelectorAll('[data-jump]').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.jump));
+  });
+
+  // Scroll-reveal for home page sections (elements stay visible without JS;
+  // the reveal-ready gate means nothing is hidden until the observer exists)
+  const revealEls = document.querySelectorAll('.reveal');
+  if (revealEls.length && window.IntersectionObserver) {
+    document.documentElement.classList.add('reveal-ready');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObserver.observe(el));
+  }
+
   // Handle Initial Load based on hash
   function handleHash() {
     const hash = window.location.hash.substring(1);
@@ -165,12 +187,19 @@
   const themeToggleDesktop = document.getElementById('theme-toggle-desktop');
   const themeToggleMobile = document.getElementById('theme-toggle-mobile');
   
-  function applyTheme(theme) {
+  function applyTheme(theme, animate = false) {
+    const root = document.documentElement;
+    if (animate) {
+      // Enable the color cross-fade just for this toggle, then remove it so
+      // hover and other transitions behave normally afterwards.
+      root.classList.add('theme-anim');
+      window.setTimeout(() => root.classList.remove('theme-anim'), 500);
+    }
     if (theme === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
+      root.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
     } else {
-      document.documentElement.removeAttribute('data-theme');
+      root.removeAttribute('data-theme');
       localStorage.setItem('theme', 'light');
     }
   }
@@ -186,7 +215,7 @@
 
   function toggleTheme() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
-    applyTheme(currentTheme === 'dark' ? 'light' : 'dark');
+    applyTheme(currentTheme === 'dark' ? 'light' : 'dark', true);
   }
 
   if (themeToggleDesktop) themeToggleDesktop.addEventListener('click', toggleTheme);
@@ -229,83 +258,165 @@
     observer.observe(impactMetricsSection);
   }
 
-  // Event Modal Logic
-  const eventDetails = {
-    'gen-ai': {
-      title: 'Generation AI @2047 Summit',
-      date: 'Dec 2, 2024',
-      text: 'Students engaged in meaningful discussions on sustainability and future technologies at the Generation AI @2047 event. The interaction provided valuable networking opportunities with distinguished UN and industry representatives.',
-      image: 'imgs/Events/gen-ai.png'
-    },
-    'csr-esg': {
-      title: 'India CSR & ESG Summit 2024',
-      date: 'Annual Event',
-      text: 'Students participated in the India ESG & CSR Summit 2024, interacting with industry leaders and investors. The event gave them exposure to corporate sustainability practices and insights into environmental investment trends.',
-      image: 'imgs/Events/csr.png'
-    },
-    'meta-ai': {
-      title: 'Open Source AI & Education',
-      date: 'META Collab',
-      text: 'Students represented the chapter in an exclusive roundtable on Open-Source AI & Education. They shared perspectives on integrating AI into curricula, contributing to discussions with educators, policymakers, and AI experts.',
-      image: 'imgs/Events/meta-ai.png'
-    },
-    'llm-workshop': {
-      title: 'LLM Online Session',
-      date: 'Workshop',
-      text: 'An interactive workshop on Large Language Models (LLMs) was conducted for over 210 students. The session equipped participants with practical AI knowledge and hands-on understanding of emerging technologies.',
-      image: 'imgs/Events/llm-workshop.png'
-    },
-    'founder-interview': {
-      title: 'Interview with Founder of 1M1B',
-      date: 'Podcast',
-      text: 'A podcast session with 1M1B Founder Manav Subodh offered insights into social-tech entrepreneurship and startup funding. Students gained firsthand guidance on innovation, leadership, and impact-driven ventures.',
-      image: 'imgs/Events/founder-interview.png'
-    },
-    'skills-careers': {
-      title: 'Skills to Careers Summit',
-      date: 'CBSE HQ',
-      text: 'Students represented GGSIPU at the "Skills to Careers: Skilling Today, Leading Tomorrow" summit held at CBSE Headquarters, Dwarka. The event brought together 1M1B, IBM, CBSE, policymakers, and industry leaders. Participants gained insights into AI, sustainability, and India\'s national skilling strategy, strengthening the university\'s academic and professional standing.',
-      image: 'imgs/Events/skills-to-career.png'
-    },
-    'pitchmela': {
-      title: 'Pitchmela - Elysian 2025',
-      date: '2025',
-      text: 'Pitching innovative ideas for sustainability and tech-driven social entrepreneurship.',
-      image: 'imgs/Events/pitchmela.png'
-    }
-  };
+  // ==========================================================================
+  // EVENTS PAGE — cards and story modal are both rendered from
+  // src/events-data.js. To add an event, append an entry there.
+  // ==========================================================================
+  const PLACEHOLDER_COLORS = { blue: '1e3a8a', green: '16a34a' };
+  const READ_MORE_SVG = '<svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>';
 
+  function renderEventCards() {
+    const grid = document.getElementById('events-grid');
+    if (!grid) return;
+    grid.innerHTML = events.map(ev => {
+      const phColor = PLACEHOLDER_COLORS[ev.accent] || PLACEHOLDER_COLORS.blue;
+      const phText = encodeURIComponent(ev.imageAlt || ev.title);
+      // "Read More" only appears once a story (lead or sections) exists
+      const storyBtn = (ev.lead || (ev.sections && ev.sections.length))
+        ? `<button class="event-btn" data-event-id="${ev.id}">Read More ${READ_MORE_SVG}</button>`
+        : '';
+      return `
+        <div class="event-card">
+          <div class="event-content">
+            <div>
+              <span class="event-date">${ev.date}</span>
+              <h3 class="event-title">${ev.title}</h3>
+            </div>
+            <div class="event-card-img-wrapper${ev.accent === 'green' ? ' green-border' : ''}">
+              <img src="${ev.image}" alt="${ev.imageAlt || ev.title}"
+                onerror="this.src='https://placehold.co/600x400/${phColor}/ffffff?text=${phText}'" />
+            </div>
+            <p class="event-desc">${ev.cardDesc}</p>
+            ${storyBtn}
+          </div>
+        </div>`;
+    }).join('');
+  }
+  renderEventCards();
+
+  // Event Story Modal Logic
+  const eventOrder = events.map(ev => ev.id);
   const modal = document.getElementById('event-modal');
+  const storyModal = document.getElementById('story-modal');
   const modalClose = document.getElementById('modal-close');
-  const modalTitle = document.getElementById('modal-title');
-  const modalDate = document.getElementById('modal-date');
-  const modalText = document.getElementById('modal-text');
   const modalImage = document.getElementById('modal-image');
-  
+  const modalTitle = document.getElementById('modal-title');
+  const modalTag = document.getElementById('modal-tag');
+  const modalDate = document.getElementById('modal-date');
+  const modalLocation = document.getElementById('modal-location');
+  const modalMetaDot = document.getElementById('modal-meta-dot');
+  const modalLead = document.getElementById('modal-lead');
+  const modalSections = document.getElementById('modal-sections');
+  const modalHighlightsWrap = document.getElementById('modal-highlights-wrap');
+  const modalHighlights = document.getElementById('modal-highlights');
+  const modalProgress = document.getElementById('modal-progress');
+  const storyPrevBtn = document.getElementById('story-prev');
+  const storyNextBtn = document.getElementById('story-next');
+
+  let activeEventId = null;
+  let lastFocusedTrigger = null;
+
+  function renderStory(eventId) {
+    const data = events.find(ev => ev.id === eventId);
+    if (!data) return;
+    activeEventId = eventId;
+
+    modalImage.src = data.image;
+    modalTag.textContent = data.tag;
+    modalTitle.textContent = data.title;
+    modalDate.textContent = data.date;
+    modalLocation.textContent = data.location || '';
+    modalMetaDot.hidden = !data.location;
+    modalLead.textContent = data.lead || '';
+    modalLead.hidden = !data.lead;
+
+    modalSections.innerHTML = '';
+    (data.sections || []).forEach(section => {
+      const sec = document.createElement('div');
+      sec.className = 'story-section';
+      const h = document.createElement('h3');
+      h.textContent = section.heading;
+      sec.appendChild(h);
+      section.paragraphs.forEach(text => {
+        const p = document.createElement('p');
+        p.textContent = text;
+        sec.appendChild(p);
+      });
+      modalSections.appendChild(sec);
+    });
+
+    if (data.highlights && data.highlights.length) {
+      modalHighlights.innerHTML = '';
+      data.highlights.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        modalHighlights.appendChild(li);
+      });
+      modalHighlightsWrap.hidden = false;
+    } else {
+      modalHighlightsWrap.hidden = true;
+    }
+
+    const idx = eventOrder.indexOf(eventId);
+    storyPrevBtn.disabled = idx <= 0;
+    storyNextBtn.disabled = idx >= eventOrder.length - 1;
+
+    updateProgress();
+  }
+
+  function openEventStory(eventId, trigger) {
+    renderStory(eventId);
+    lastFocusedTrigger = trigger || null;
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    storyModal.scrollTop = 0;
+    updateProgress();
+    modalClose.focus();
+  }
+
+  function closeEventStory() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+    if (lastFocusedTrigger) lastFocusedTrigger.focus();
+  }
+
+  function updateProgress() {
+    const max = storyModal.scrollHeight - storyModal.clientHeight;
+    const pct = max > 0 ? (storyModal.scrollTop / max) * 100 : 0;
+    modalProgress.style.width = pct + '%';
+  }
+
   if (modal) {
     document.querySelectorAll('.event-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const eventId = btn.getAttribute('data-event-id');
-        const data = eventDetails[eventId];
-        if (data) {
-          modalTitle.textContent = data.title;
-          modalDate.textContent = data.date;
-          modalText.textContent = data.text;
-          modalImage.src = data.image;
-          modal.classList.add('active');
-        }
-      });
+      btn.addEventListener('click', () => openEventStory(btn.getAttribute('data-event-id'), btn));
     });
 
-    modalClose.addEventListener('click', () => {
-      modal.classList.remove('active');
-    });
-
+    modalClose.addEventListener('click', closeEventStory);
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) {
-        modal.classList.remove('active');
+      if (e.target === modal) closeEventStory();
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.classList.contains('active')) closeEventStory();
+    });
+
+    storyPrevBtn.addEventListener('click', () => {
+      const idx = eventOrder.indexOf(activeEventId);
+      if (idx > 0) {
+        renderStory(eventOrder[idx - 1]);
+        storyModal.scrollTop = 0;
+        updateProgress();
       }
     });
+    storyNextBtn.addEventListener('click', () => {
+      const idx = eventOrder.indexOf(activeEventId);
+      if (idx < eventOrder.length - 1) {
+        renderStory(eventOrder[idx + 1]);
+        storyModal.scrollTop = 0;
+        updateProgress();
+      }
+    });
+
+    storyModal.addEventListener('scroll', updateProgress, { passive: true });
   }
 
   // ==========================================================================
