@@ -333,3 +333,16 @@ These caused real bugs; follow them to avoid re-introducing them.
   Movement") point to the chapter's Google Form instead of the WhatsApp chat.
   Footer WhatsApp social card intentionally still links to WhatsApp. Verified
   live (badge text + both hrefs).
+- 2026-10-04 — Merged origin/main (a5eac97 "major ui changes" by Bhuwan-007)
+  into aaryandev, resolving all 3 content conflicts (index.html, src/main.js,
+  src/style.css) with `checkout --ours` to keep this branch's architecture.
+  Rejected from main: leaf-curtain tab transition + parallax hills +
+  wind-leaves background (3 unconditional full-page rAF loops, ~460 canvas
+  sprites redrawn per frame forever, 4x 100vw will-change layers, universal
+  backdrop-filter blur) and its 2x1.5s forced tab-switch lockout; also its
+  inline `eventDetails` duplicate of src/events-data.js. Kept from main: the
+  higher-res newsletter scans — git rename-detection auto-merged them into
+  imgs/Events/, then re-encoded q88 WebP (1.79MB/1.28MB PNG → 342KB/309KB,
+  same 1414x2000 dims) and updated the 4 index.html refs to .webp. `.agents/`
+  now in .gitignore. Main's changes remain intact on the main branch; if its
+  UI is ever wanted, port hero-canvas first (gate it with IntersectionObserver).
