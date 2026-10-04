@@ -357,3 +357,14 @@ These caused real bugs; follow them to avoid re-introducing them.
   fresh visit renders dark, "Rudra Pratap Singh" + "Aryan Shekhar Vats" chips
   (the two ellipsized ones at 800px) show the tooltip at opacity 1,
   non-truncated chips show nothing, and the light toggle still persists.
+- 2026-10-04 — Fixed hosted-site images (all viewports, noticed on mobile):
+  the Cloudflare Worker serves the vite `dist/` bundle, and `dist/` only
+  mirrors `public/` — `imgs/` lived at the repo root, so every raw-path image
+  (events, OBs, qrcodes, logo, newsletter scans) returned the SPA-fallback
+  HTML with 200/text-html, fired each <img>'s onerror, and showed the
+  placehold.co/alt fallback. Fix: moved `imgs/` into `public/imgs/` (vite
+  copies it to dist; all references were relative and unchanged). Windows
+  dir-lock (dev server held imgs/) forced per-child git mv; git flattened
+  OBs/24-25 into OBs/ — restored. Verified: mobile-viewport (390px) event
+  images all load, 13/13 OB photos load, dist/imgs populated after build.
+  Lesson: anything referenced by raw path must live under public/.
