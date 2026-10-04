@@ -8,6 +8,19 @@
     <link rel="stylesheet" href="/src/style.css" />
   </head>
   <body>
+    <!-- Background Layers -->
+    <div id="layer-sky" class="parallax-layer"></div>
+    <div id="layer-mountain" class="parallax-layer"></div>
+    <div id="layer-trees-back" class="parallax-layer"></div>
+    <div id="layer-ground" class="parallax-layer"></div>
+    <canvas id="bg-wind-leaves" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -6; pointer-events: none;"></canvas>
+
+    <div id="leaf-curtain-container" style="pointer-events: none;">
+      <canvas id="leaf-canvas"></canvas>
+      <div class="curtain-text">1M1B</div>
+    </div>
+
+
     <!-- Header -->
     <header class="header">
       <div class="nav-container">
@@ -47,15 +60,21 @@
     <main class="main-content">
       <!-- HOME TAB -->
       <div id="home" class="tab-content active animate-fade-in">
-        <div class="hero">
-          <h1>1M1B IPU CHAPTER</h1>
-          <p class="subtitle">A NEW ERA IN SUSTAINABILITY</p>
-          <p class="desc">
-            1M1B (One Million For One Billion) is a United Nations-Accredited Non-Profit Organisation. 
-            We empower youth to become leaders and changemakers, focusing on projects aligned with the 
-            UN Sustainable Development Goals (SDGs).
-          </p>
+        
+        <div class="hero reveal-depth" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 2rem; background: rgba(255,255,255,0.4); border-radius: 2rem; padding: 2rem; border: 1px solid rgba(255,255,255,0.6); box-shadow: 0 20px 40px rgba(0,0,0,0.05); margin-bottom: 4rem;">
+          <div style="flex: 1; min-width: 300px;">
+            <div style="display: inline-block; padding: 0.5rem 1rem; background: #d1fae5; color: #065f46; border-radius: 999px; font-weight: 800; font-size: 0.8rem; margin-bottom: 1rem; border: 1px solid #6ee7b7;">A NEW ERA</div>
+            <h1 style="color: #1e293b; font-size: 3.5rem; line-height: 1.1; margin-bottom: 1.5rem;">Empowering <br><span style="background: linear-gradient(to right, #059669, #0284c7); -webkit-background-clip: text; color: transparent;">The Future.</span></h1>
+            <p class="desc" style="color: #334155 !important; font-size: 1.2rem; margin-bottom: 2rem;">
+              1M1B empowers youth to become leaders and changemakers, driving real-world projects aligned with UN Sustainable Development Goals.
+            </p>
+          </div>
+          <div class="hero-canvas-container" style="margin: 0 auto;">
+            <canvas id="hero-network-canvas"></canvas>
+            <div class="hero-canvas-text">1M1B</div>
+          </div>
         </div>
+
 
         <div class="vision-mission">
           <div class="card-vm vision">
