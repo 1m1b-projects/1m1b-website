@@ -1833,6 +1833,34 @@ html.reveal-ready .reveal.revealed { opacity: 1; transform: none; }
   text-overflow: ellipsis;
 }
 
+/* Full-name tooltip (shown by main.js when a chip name is truncated) */
+.name-tooltip {
+  position: fixed;
+  z-index: 1200;
+  max-width: 260px;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  background: #1e293b;
+  color: #f8fafc;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.name-tooltip.visible {
+  opacity: 1;
+}
+
+[data-theme="dark"] .name-tooltip {
+  background: #334155;
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
 /* Stagger Animation for Team Cards */
 .stagger-in {
   animation: staggerFadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;

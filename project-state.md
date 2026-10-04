@@ -346,3 +346,14 @@ These caused real bugs; follow them to avoid re-introducing them.
   same 1414x2000 dims) and updated the 4 index.html refs to .webp. `.agents/`
   now in .gitignore. Main's changes remain intact on the main branch; if its
   UI is ever wanted, port hero-canvas first (gate it with IntersectionObserver).
+- 2026-10-04 — Dark-by-default + truncated-name tooltips (user request): an
+  inline <head> script sets data-theme="dark" pre-paint when localStorage has
+  no saved `theme` (kills the light flash; main.js fallback now also applies
+  dark and persists it — explicit light toggle still wins). Added a shared
+  .name-tooltip element: on execom chip mouseenter, main.js checks
+  scrollWidth/Height > clientWidth/Height on .execom-chip-name and only then
+  shows the full data-name in a fixed pill above the chip (flips below near
+  the viewport top; hides on scroll/resize/mouseleave). Verified in IAB:
+  fresh visit renders dark, "Rudra Pratap Singh" + "Aryan Shekhar Vats" chips
+  (the two ellipsized ones at 800px) show the tooltip at opacity 1,
+  non-truncated chips show nothing, and the light toggle still persists.

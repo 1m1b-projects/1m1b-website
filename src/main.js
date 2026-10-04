@@ -204,13 +204,13 @@ import { events } from './events-data.js';
     }
   }
 
-  // Check saved theme or system preference
+  // Check saved theme; first-time visitors get dark mode (the inline
+  // <head> script already set data-theme="dark" pre-paint — this persists it)
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
     applyTheme(savedTheme);
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    // applyTheme('dark'); // We stick to manual toggle per user request, default light
-    applyTheme('light');
+  } else {
+    applyTheme('dark');
   }
 
   function toggleTheme() {
@@ -537,4 +537,39 @@ import { events } from './events-data.js';
 
   if (teamSearchClear) teamSearchClear.addEventListener('click', resetTeamSearch);
   if (teamSearchResetBtn) teamSearchResetBtn.addEventListener('click', resetTeamSearch);
+
+  // Full-name tooltip for team chips whose name is truncated by the
+  // ellipsis (only shows when the name doesn't fully fit)
+  const nameTip = document.createElement('div');
+  nameTip.className = 'name-tooltip';
+  nameTip.setAttribute('role', 'tooltip');
+  document.body.appendChild(nameTip);
+
+  function hideNameTip() {
+    nameTip.classList.remove('visible');
+  }
+
+  document.querySelectorAll('.execom-chip-modern').forEach(chip => {
+    const label = chip.querySelector('.execom-chip-name');
+    if (!label) return;
+    chip.addEventListener('mouseenter', () => {
+      const wrapped = label.scrollWidth > label.clientWidth || label.scrollHeight > label.clientHeight;
+      if (!wrapped) return;
+      nameTip.textContent = chip.dataset.name || label.textContent;
+      nameTip.classList.add('visible');
+      const r = chip.getBoundingClientRect();
+      // Center above the chip; flip below when there's no room at the top
+      nameTip.style.left = `${r.left + r.width / 2}px`;
+      if (r.top < 70) {
+        nameTip.style.top = `${r.bottom}px`;
+        nameTip.style.transform = 'translate(-50%, 10px)';
+      } else {
+        nameTip.style.top = `${r.top}px`;
+        nameTip.style.transform = 'translate(-50%, calc(-100% - 10px))';
+      }
+    });
+    chip.addEventListener('mouseleave', hideNameTip);
+  });
+  window.addEventListener('scroll', hideNameTip, { passive: true });
+  window.addEventListener('resize', hideNameTip);
 // End of script

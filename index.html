@@ -19,6 +19,16 @@
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="https://placehold.co/64x64/1e3a8a/ffffff?text=1M" />
 
+  <script>
+    // Start the site in dark mode for first-time visitors, before first
+    // paint (avoids a light flash); a saved toggle preference always wins.
+    try {
+      if (!localStorage.getItem('theme')) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) { /* storage unavailable */ }
+  </script>
+
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 
