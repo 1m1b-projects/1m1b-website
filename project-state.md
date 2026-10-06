@@ -388,5 +388,5 @@ These caused real bugs; follow them to avoid re-introducing them.
   `document.write` year with a JS-set span, QR codes stay `loading="lazy"`.
   Verified in IAB: pre-load img fetches dropped 25→3, all tabs render, story
   modal image loads, counters animate. NOTE: `public/imgs/logo/1M 1B.png`
-  (6.2MB) is referenced nowhere in the repo — deploy dead weight, candidate
-  for deletion (not removed without user sign-off).
+  (6.2MB) is referenced nowhere in the repo; user reviewed on 2026-10-06 and
+  asked to keep it — do not delete.
