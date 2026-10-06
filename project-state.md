@@ -390,3 +390,15 @@ These caused real bugs; follow them to avoid re-introducing them.
   modal image loads, counters animate. NOTE: `public/imgs/logo/1M 1B.png`
   (6.2MB) is referenced nowhere in the repo; user reviewed on 2026-10-06 and
   asked to keep it — do not delete.
+- 2026-10-06 — README rewritten from a bare one-liner into full docs: tech
+  stack (vanilla HTML/CSS/JS + Vite 8 + oxlint, zero runtime deps), setup &
+  npm scripts, annotated project structure, how tabs/events/theme/stats
+  work, the data-src image-loading pattern (incl. why `loading="lazy"` is
+  insufficient in hidden tabs), the aaryandev→main release flow, and the
+  "raw-path assets must live under public/" deploy rule. Same session:
+  pushed both branches — origin/main and origin/aaryandev fast-forwarded
+  631803b → 86b5e4e (perf pass + README), so the Cloudflare Worker deploy
+  now serves the optimized build (dist bundles: index-BKRrMnw0.css /
+  index-BTdTof8l.js). Known stale bits flagged, unfixed by choice:
+  og:url/og:image meta still point at the old vercel.app domain and a
+  placehold.co image; footer QR PNGs (~1.8MB) uncompressed.
