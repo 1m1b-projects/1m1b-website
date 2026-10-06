@@ -64,11 +64,27 @@ import { events } from './events-data.js';
   const mobileMenuBtn = document.getElementById('mobile-menu-btn');
   const mobileNav = document.getElementById('mobile-nav');
 
+  // Give deferred images (data-src) their real src. Chromium fetches
+  // loading="lazy" imgs even inside display:none tabs, so hidden-tab images
+  // use data-src and are hydrated here on first open or by the idle warmer.
+  function hydrateImages(root) {
+    root.querySelectorAll('img[data-src]').forEach(img => {
+      img.src = img.getAttribute('data-src');
+      img.removeAttribute('data-src');
+    });
+  }
+
   function switchTab(tabId) {
     // Hide all tabs
     tabContents.forEach(tab => {
       tab.classList.remove('active');
     });
+
+    // Deferred images: hidden tabs store their image URL in data-src so the
+    // initial page load fetches nothing it can't see. Give the tab its real
+    // src before showing it.
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) hydrateImages(targetTab);
     
     // Update desktop nav buttons
     navBtns.forEach(btn => {
@@ -87,16 +103,15 @@ import { events } from './events-data.js';
     });
     
     // Show active tab
-    const activeTab = document.getElementById(tabId);
-    if (activeTab) {
-      activeTab.classList.add('active');
-      activeTab.classList.add('animate-fade-in');
+    if (targetTab) {
+      targetTab.classList.add('active');
+      targetTab.classList.add('animate-fade-in');
       setTimeout(() => {
-        activeTab.classList.remove('animate-fade-in');
+        targetTab.classList.remove('animate-fade-in');
       }, 400);
 
       if (tabId === 'team') {
-        const teamCards = activeTab.querySelectorAll('.mentor-card-modern, .team-card-modern, .execom-chip-modern');
+        const teamCards = targetTab.querySelectorAll('.mentor-card-modern, .team-card-modern, .execom-chip-modern');
         teamCards.forEach((card, idx) => {
           card.classList.remove('stagger-in');
           void card.offsetWidth;
@@ -227,24 +242,22 @@ import { events } from './events-data.js';
   let metricsAnimated = false;
 
   function animateMetrics() {
-    metricNumbers.forEach(metric => {
-      const target = +metric.getAttribute('data-target');
-      const duration = 2000; // 2 seconds
-      const stepTime = 20; // Update every 20ms
-      const steps = Math.ceil(duration / stepTime);
-      const increment = target / steps;
-      let current = 0;
+    // Single rAF loop for all counters — the old version ran one setInterval
+    // (50 ticks/sec) per metric, each writing innerText on its own timer.
+    const duration = 2000;
+    const start = performance.now();
+    const targets = Array.from(metricNumbers, m => +m.getAttribute('data-target'));
 
-      const updateCounter = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-          metric.innerText = target;
-          clearInterval(updateCounter);
-        } else {
-          metric.innerText = Math.ceil(current);
-        }
-      }, stepTime);
-    });
+    function frame(now) {
+      const t = Math.min((now - start) / duration, 1);
+      const eased = 1 - Math.pow(1 - t, 3); // ease-out: fast start, gentle land
+      metricNumbers.forEach((metric, i) => {
+        metric.innerText = Math.round(targets[i] * eased);
+      });
+      if (t < 1) requestAnimationFrame(frame);
+    }
+
+    requestAnimationFrame(frame);
   }
 
   // Use Intersection Observer for Metrics
@@ -283,7 +296,7 @@ import { events } from './events-data.js';
               <h3 class="event-title">${ev.title}</h3>
             </div>
             <div class="event-card-img-wrapper${ev.accent === 'green' ? ' green-border' : ''}">
-              <img src="${ev.image}" alt="${ev.imageAlt || ev.title}"
+              <img data-src="${ev.image}" alt="${ev.imageAlt || ev.title}" decoding="async"
                 onerror="this.src='https://placehold.co/600x400/${phColor}/ffffff?text=${phText}'" />
             </div>
             <p class="event-desc">${ev.cardDesc}</p>
@@ -572,4 +585,33 @@ import { events } from './events-data.js';
   });
   window.addEventListener('scroll', hideNameTip, { passive: true });
   window.addEventListener('resize', hideNameTip);
+
+  // ==========================================================================
+  // IDLE-TIME CACHE WARMING
+  // Hidden tabs defer their images via data-src, so they'd otherwise start
+  // downloading only when that tab is first opened. Once the page has
+  // settled, hydrate them one file per idle slot so tab switches and the
+  // stats modal open with everything already local.
+  // ==========================================================================
+  window.addEventListener('load', () => {
+    const footerYear = document.getElementById('footer-year');
+    if (footerYear) footerYear.textContent = new Date().getFullYear();
+
+    const pending = Array.from(document.querySelectorAll('img[data-src]'));
+    const idle = window.requestIdleCallback || (cb => setTimeout(cb, 0));
+    const warmNext = () => {
+      const img = pending.shift();
+      if (img) {
+        img.src = img.getAttribute('data-src');
+        img.removeAttribute('data-src');
+        idle(warmNext);
+        return;
+      }
+      // Images done — warm the stats payload too, so the stats modal shows
+      // data instantly on first open.
+      fetch('/stats.json').catch(() => { /* handled again when modal opens */ });
+    };
+    if (pending.length) idle(warmNext);
+    else warmNext();
+  });
 // End of script

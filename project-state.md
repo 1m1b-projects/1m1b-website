@@ -368,3 +368,25 @@ These caused real bugs; follow them to avoid re-introducing them.
   OBs/24-25 into OBs/ — restored. Verified: mobile-viewport (390px) event
   images all load, 13/13 OB photos load, dist/imgs populated after build.
   Lesson: anything referenced by raw path must live under public/.
+- 2026-10-06 — Home-page performance pass (user: "sluggish, marquee strip and
+  other elements janky"). Root causes found in the continuous-animation layer,
+  not the marquee itself: (1) three aurora hero blobs carried `filter:
+  blur(70px)` — three huge always-repainted layers; the radial gradients
+  already fade to transparent so the blur was dropped, transform-only drift
+  kept. (2) `heroGradShift` animated `background-position` on the
+  gradient-clipped h1 — full text repaint every frame for a barely-visible
+  shift; gradient is now static. (3) marquee track got explicit `will-change:
+  transform` so the infinite translate never re-rasterizes. (4) Metrics
+  counter rewrote innerText from one 20ms setInterval per metric; replaced
+  with a single rAF loop + ease-out. Load-path: Chromium fetches
+  `loading="lazy"` imgs even inside `display:none` tabs (verified via
+  performance entries — all 25 fetched before load), so hidden-tab images now
+  use `data-src` and are hydrated by switchTab on first open + an idle
+  warmer (requestIdleCallback, one file per slot, then /stats.json prefetch)
+  — initial home load fetches nothing it can't see and tab switches hit
+  cache. Also: removed empty `src=""` on story-modal img, replaced footer
+  `document.write` year with a JS-set span, QR codes stay `loading="lazy"`.
+  Verified in IAB: pre-load img fetches dropped 25→3, all tabs render, story
+  modal image loads, counters animate. NOTE: `public/imgs/logo/1M 1B.png`
+  (6.2MB) is referenced nowhere in the repo — deploy dead weight, candidate
+  for deletion (not removed without user sign-off).

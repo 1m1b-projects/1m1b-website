@@ -315,12 +315,14 @@ button, input, select, textarea {
   max-width: 56rem;
 }
 
-/* Aurora blobs + dot grid (decorative layer behind the content) */
+/* Aurora blobs + dot grid (decorative layer behind the content).
+   The radial gradients already fade to transparent, so no CSS blur — blur(70px)
+   here forced three huge always-repainted layers and was the main source of
+   home-page jank. Transform-only drift keeps them on the compositor. */
 .hero-aurora { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
 .aurora-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(70px);
   will-change: transform;
 }
 .aurora-1 {
@@ -428,10 +430,9 @@ button, input, select, textarea {
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .hero-word-grad {
-    background-size: 200% 100%;
-    animation: heroGradShift 7s ease-in-out infinite alternate;
-  }
+  /* The old heroGradShift animated background-position on the gradient-clipped
+     heading — a full text repaint every frame for a barely-visible shift.
+     The gradient is now static; entrance/exit motion stays. */
   .hero-word {
     transform: translateY(115%);
     animation: heroWordRise 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
@@ -443,10 +444,6 @@ button, input, select, textarea {
     animation: heroFadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     animation-delay: var(--hero-delay, 0s);
   }
-}
-@keyframes heroGradShift {
-  from { background-position: 0% 50%; }
-  to { background-position: 100% 50%; }
 }
 @keyframes heroWordRise { to { transform: translateY(0); } }
 @keyframes heroFadeUp { to { opacity: 1; transform: none; } }
@@ -617,7 +614,15 @@ button, input, select, textarea {
   -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
   mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
 }
-.marquee-track { display: flex; width: max-content; animation: marqueeScroll 26s linear infinite; }
+/* will-change keeps the strip on its own compositor layer so the infinite
+   translate never re-rasterizes mid-loop (belt-and-braces: transform-only
+   animations usually promote automatically). */
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 26s linear infinite;
+  will-change: transform;
+}
 .marquee:hover .marquee-track { animation-play-state: paused; }
 .marquee-set {
   display: flex;
