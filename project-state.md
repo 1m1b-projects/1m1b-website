@@ -420,4 +420,10 @@ These caused real bugs; follow them to avoid re-introducing them.
   links straight to the form. Verified in IAB at 1280 light/dark and
   390px mobile — grid, tags, images, CTA all render; fullPage screenshots
   show sticky-header stitching artifacts (repeated sections), so verify
-  with viewport captures + manual scroll, not fullPage.
+  with viewport captures + manual scroll, not fullPage. Same session:
+  non-tech team tags (PR & Outreach / Photo & Video / Video Editing /
+  Graphic Designing / Content Writing) changed to "Non-Tech" per user
+  request; lint + build clean; committed and pushed — aaryandev and main
+  both fast-forwarded to 0597e76 ("Add Join Us tab: 10-team listing with
+  photos, data-driven rendering"), so the Worker deploy picks it up.
+  Note: `dist/` is gitignored — the deploy builds from source.
