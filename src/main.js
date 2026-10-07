@@ -1,5 +1,5 @@
 import { events } from './events-data.js';
-import { teams } from './teams-data.js';
+import { teams, JOIN_FORM_URL } from './teams-data.js';
 
   // Stats Modal Logic
   const statsTrigger = document.getElementById('stats-trigger');
@@ -327,7 +327,12 @@ import { teams } from './teams-data.js';
   // ==========================================================================
   // JOIN US PAGE — team cards are rendered from src/teams-data.js.
   // To add a team, append an entry there.
+  // Form link: change JOIN_FORM_URL in src/teams-data.js (one place).
   // ==========================================================================
+  document.querySelectorAll('.join-form-link').forEach((el) => {
+    el.href = JOIN_FORM_URL;
+  });
+
   function renderTeamCards() {
     const grid = document.getElementById('teams-grid');
     if (!grid) return;

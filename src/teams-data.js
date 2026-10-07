@@ -1,4 +1,10 @@
 // ==========================================================================
+// JOIN FORM URL — every Join Us / Apply CTA (desktop nav, mobile nav, hero,
+// Join Us tab) reads this. Change this one line if the form link changes.
+// ==========================================================================
+export const JOIN_FORM_URL = 'https://ggl.link/1m1b';
+
+// ==========================================================================
 // TEAMS DATA — single source of truth for the Join Us page.
 //
 // To add a new team, copy a block below, paste it into the array, and fill
