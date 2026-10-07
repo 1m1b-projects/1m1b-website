@@ -50,6 +50,7 @@
         <button class="nav-btn" data-tab="team">Team</button>
         <button class="nav-btn" data-tab="internship">Green Internship</button>
         <button class="nav-btn" data-tab="publications">Publications</button>
+        <button class="nav-btn" data-tab="join">Join Us</button>
         <button class="theme-toggle" id="theme-toggle-desktop" aria-label="Toggle Dark Mode">
           <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
             fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -96,6 +97,7 @@
       <button class="mobile-nav-btn" data-tab="team">Team</button>
       <button class="mobile-nav-btn" data-tab="internship">Green Internship</button>
       <button class="mobile-nav-btn" data-tab="publications">Publications</button>
+      <button class="mobile-nav-btn" data-tab="join">Join Us</button>
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7fHBfwC3RAt9c-BuYQyR9whp9V9z6dpnoWq68FCz9dODnvQ/viewform" target="_blank" rel="noopener noreferrer"
         class="mobile-nav-btn cta-btn-mobile">Join Us</a>
     </div>
@@ -792,6 +794,43 @@
         </div>
       </div>
     </div>
+
+    <!-- JOIN US TAB -->
+    <div id="join" class="tab-content">
+      <div class="team-header-wrapper">
+        <span class="team-pill-badge">Recruitment Open</span>
+        <h2 class="team-page-title">Join Us</h2>
+        <p class="team-page-subtitle">Find the team that fits you.</p>
+      </div>
+
+      <div class="join-intro">
+        <p class="join-intro-lead">
+          <strong>We're here to learn.</strong> If you think you have the potential and are eager to
+          learn any of the skills below, give it a shot &mdash; enthusiasm matters more than experience.
+        </p>
+        <p class="join-intro-note">
+          Our college offers four courses &mdash; AIML, AIDS, AR, and IIoT &mdash; but that doesn't lock you
+          into a matching team. It's not only AIML students who can join Machine Learning, or AIDS
+          students who can join Data Science. Every team is open to everyone, so pick whichever role
+          genuinely interests you.
+        </p>
+      </div>
+
+      <div class="events-grid join-grid" id="teams-grid">
+        <!-- Dynamically populated by main.js from src/teams-data.js -->
+      </div>
+
+      <div class="join-cta">
+        <h3 class="join-cta-title">Ready to join?</h3>
+        <p class="join-cta-desc">Pick a team that excites you and fill out the application form &mdash; we'll take it from there.</p>
+        <a href="https://docs.google.com/forms/d/e/1FAIpQLSf7fHBfwC3RAt9c-BuYQyR9whp9V9z6dpnoWq68FCz9dODnvQ/viewform" target="_blank" rel="noopener noreferrer" class="cta-btn join-cta-btn">
+          Apply Now
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14m0 0l-6-6m6 6l-6 6" />
+          </svg>
+        </a>
+      </div>
+    </div>
   </main>
 
   <!-- Footer -->
@@ -814,6 +853,7 @@
           <li><a href="#team">Our Team</a></li>
           <li><a href="#internship">Green Skills</a></li>
           <li><a href="#publications">Publications</a></li>
+          <li><a href="#join">Join Us</a></li>
           <li><a href="#" id="stats-trigger" class="stats-link">Site Stats</a></li>
         </ul>
       </div>

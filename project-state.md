@@ -402,3 +402,22 @@ These caused real bugs; follow them to avoid re-introducing them.
   index-BTdTof8l.js). Known stale bits flagged, unfixed by choice:
   og:url/og:image meta still point at the old vercel.app domain and a
   placehold.co image; footer QR PNGs (~1.8MB) uncompressed.
+- 2026-10-07 — New "Join Us" tab (#join) listing all 10 teams. Data-driven
+  like events: `src/teams-data.js` (name/tag/tagColor/image/desc schema,
+  doc comment on top) rendered by `renderTeamCards()` in main.js into
+  `#teams-grid`; cards get the same `.stagger-in` entrance as the team
+  page (join branch added in switchTab). Card layout reuses `.events-grid`
+  plus new `.join-*` classes in style.css (theme tokens + explicit
+  `[data-theme="dark"]` overrides; tag pills reuse `.section-tag` +
+  green/blue/purple/emerald variants). Header block reuses
+  `.team-header-wrapper`/`.team-pill-badge`. Copy opens with the
+  "we're here to learn / any course can pick any team" message the user
+  supplied. Team photos are 10 Unsplash images (~800px, 27–130KB)
+  downloaded to `public/imgs/teams/` (raw-path deploy rule), referenced
+  via data-src with placehold.co onerror fallbacks — no hidden-tab fetch.
+  Nav: Join Us button added to desktop + mobile nav (before the
+  Google-Form CTA) and to footer Quick Links (#join); the nav CTA still
+  links straight to the form. Verified in IAB at 1280 light/dark and
+  390px mobile — grid, tags, images, CTA all render; fullPage screenshots
+  show sticky-header stitching artifacts (repeated sections), so verify
+  with viewport captures + manual scroll, not fullPage.

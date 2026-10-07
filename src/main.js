@@ -1,4 +1,5 @@
 import { events } from './events-data.js';
+import { teams } from './teams-data.js';
 
   // Stats Modal Logic
   const statsTrigger = document.getElementById('stats-trigger');
@@ -116,6 +117,22 @@ import { events } from './events-data.js';
           card.classList.remove('stagger-in');
           void card.offsetWidth;
           card.style.animationDelay = `${Math.min(idx * 0.03, 0.5)}s`;
+          card.classList.add('stagger-in');
+
+          card.addEventListener('animationend', function handler() {
+            card.classList.remove('stagger-in');
+            card.style.animationDelay = '';
+            card.removeEventListener('animationend', handler);
+          });
+        });
+      }
+
+      if (tabId === 'join') {
+        const joinCards = targetTab.querySelectorAll('.join-team-card');
+        joinCards.forEach((card, idx) => {
+          card.classList.remove('stagger-in');
+          void card.offsetWidth;
+          card.style.animationDelay = `${Math.min(idx * 0.05, 0.6)}s`;
           card.classList.add('stagger-in');
 
           card.addEventListener('animationend', function handler() {
@@ -306,6 +323,31 @@ import { events } from './events-data.js';
     }).join('');
   }
   renderEventCards();
+
+  // ==========================================================================
+  // JOIN US PAGE — team cards are rendered from src/teams-data.js.
+  // To add a team, append an entry there.
+  // ==========================================================================
+  function renderTeamCards() {
+    const grid = document.getElementById('teams-grid');
+    if (!grid) return;
+    grid.innerHTML = teams.map(team => {
+      const phText = encodeURIComponent(team.imageAlt || team.name);
+      return `
+        <div class="join-team-card">
+          <div class="join-team-img-wrapper">
+            <img data-src="${team.image}" alt="${team.imageAlt || team.name}" decoding="async"
+              onerror="this.src='https://placehold.co/600x400/1e3a8a/ffffff?text=${phText}'" />
+          </div>
+          <div class="join-team-content">
+            <span class="section-tag ${team.tagColor}-tag">${team.tag}</span>
+            <h3 class="join-team-name">${team.name}</h3>
+            <p class="join-team-desc">${team.desc}</p>
+          </div>
+        </div>`;
+    }).join('');
+  }
+  renderTeamCards();
 
   // Event Story Modal Logic
   const eventOrder = events.map(ev => ev.id);

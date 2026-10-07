@@ -3089,3 +3089,144 @@ p {
 .stats-link:hover {
   color: white !important;
 }
+
+/* ==========================================================================
+   JOIN US PAGE — teams listing rendered from src/teams-data.js.
+   Themed surfaces use theme tokens with explicit dark overrides; tag pills
+   reuse the team page's .section-tag color variants.
+   ========================================================================== */
+.join-intro {
+  max-width: 820px;
+  margin: 0 auto 3rem;
+  padding: 1.5rem 1.75rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-left: 4px solid var(--accent-green-dark);
+  border-radius: 1rem;
+}
+
+.join-intro-lead {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: var(--text-heading);
+  margin: 0 0 0.75rem;
+}
+
+.join-intro-note {
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--text-gray);
+  margin: 0;
+}
+
+.join-grid {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.join-team-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.join-team-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+[data-theme="dark"] .join-team-card:hover {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.45);
+}
+
+.join-team-img-wrapper {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background-color: var(--bg-slate);
+}
+
+.join-team-img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.join-team-card:hover .join-team-img-wrapper img {
+  transform: scale(1.04);
+}
+
+.join-team-content {
+  padding: 1.25rem 1.25rem 1.5rem;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.join-team-content .section-tag {
+  align-self: flex-start;
+  margin-bottom: 0.6rem;
+}
+
+.join-team-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-heading) !important;
+  margin: 0 0 0.5rem;
+}
+
+.join-team-desc {
+  font-size: 0.9rem;
+  line-height: 1.625;
+  color: var(--text-gray) !important;
+  margin: 0;
+}
+
+.join-cta {
+  max-width: 640px;
+  margin: 3.5rem auto 0;
+  text-align: center;
+}
+
+.join-cta-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text-heading) !important;
+  margin: 0 0 0.5rem;
+}
+
+.join-cta-desc {
+  font-size: 0.95rem;
+  color: var(--text-gray);
+  margin: 0 0 1.5rem;
+}
+
+.join-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+}
+
+.join-cta-btn svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+
+@media (max-width: 480px) {
+  .join-intro {
+    padding: 1.15rem 1.1rem;
+    margin-bottom: 2.25rem;
+  }
+  .join-cta {
+    margin-top: 2.5rem;
+  }
+}
