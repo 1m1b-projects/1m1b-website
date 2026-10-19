@@ -427,3 +427,19 @@ These caused real bugs; follow them to avoid re-introducing them.
   both fast-forwarded to 0597e76 ("Add Join Us tab: 10-team listing with
   photos, data-driven rendering"), so the Worker deploy picks it up.
   Note: `dist/` is gitignored — the deploy builds from source.
+- 2026-10-19 — Mobile Lighthouse audit & fixes (branch `clean-audit-fix`):
+  Conducted Lighthouse mobile audit on the live Cloudflare Worker deployment
+  (baseline: Perf 95, A11y 91, BP 100, SEO 92). Identified and resolved 3 mobile
+  issues: (1) Broken mobile footer navigation: footer link pointed to `#about`
+  with no corresponding element id in markup; added `id="about"` to the Vision &
+  Mission container and added `#about` scroll and `hashchange` routing in
+  `main.js`. (2) Invalid `/robots.txt` endpoint: SPA fallback returned HTML with
+  912 Lighthouse syntax errors; created `public/robots.txt` with clean directives
+  and sitemap reference (SEO score raised from 92 to 100). (3) Broken Open Graph
+  link: `og:url` pointed to a 404 Vercel URL; updated to the live Workers URL and
+  added a valid `<link rel="canonical">` tag. Also removed 6 placeholder LinkedIn
+  links from office bearer cards. Analyzed render-blocking CSS (`render-blocking-insight`);
+  confirmed synchronous loading is optimal to maintain zero Cumulative Layout Shift
+  (CLS = 0) with 0.9s FCP. Generated full `audit-report.md` and verified preview
+  build at `https://clean-audit-fix-1m1b-website.localhost-83c.workers.dev/`.
+
