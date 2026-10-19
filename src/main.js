@@ -200,6 +200,14 @@ import { teams, JOIN_FORM_URL } from './teams-data.js';
   // Handle Initial Load based on hash
   function handleHash() {
     const hash = window.location.hash.substring(1);
+    if (hash === 'about') {
+      switchTab('home');
+      const aboutEl = document.getElementById('about');
+      if (aboutEl) {
+        aboutEl.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
     if (hash && document.getElementById(hash)) {
       switchTab(hash);
     } else {
@@ -207,8 +215,33 @@ import { teams, JOIN_FORM_URL } from './teams-data.js';
     }
   }
 
-  // Handle Back/Forward Navigation
+  // Handle Back/Forward Navigation and In-Page Hash Changes
   window.addEventListener('popstate', handleHash);
+  window.addEventListener('hashchange', handleHash);
+
+  // Footer Quick Links navigation handler
+  document.querySelectorAll('.footer-quick-links a[href^="#"]').forEach(link => {
+    link.addEventListener('click', (e) => {
+      const targetHash = link.getAttribute('href').substring(1);
+      if (targetHash === 'about') {
+        e.preventDefault();
+        switchTab('home');
+        const aboutEl = document.getElementById('about');
+        if (aboutEl) {
+          aboutEl.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (history.pushState) {
+          history.pushState(null, null, '#about');
+        } else {
+          location.hash = '#about';
+        }
+      } else if (targetHash && document.getElementById(targetHash)) {
+        e.preventDefault();
+        switchTab(targetHash);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+  });
 
   // Initialize on load
   document.addEventListener('DOMContentLoaded', handleHash);
