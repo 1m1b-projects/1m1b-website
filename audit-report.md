@@ -58,20 +58,24 @@
 
 ## 4. Verification & Validation
 
-| Audit Category | Baseline (Live) | Post-Fix (Preview) |
+| Audit Category | Baseline (Live) | Post-Fix (Live Cloudflare Preview) |
 |---|:---:|:---:|
-| **Performance** | 95 | Clean (FCP 0.9s, CLS 0, Speed Index 1.3s) |
-| **Accessibility** | 91 | 91 |
-| **Best Practices** | 100 | 100 |
-| **SEO** | 92 | **100** |
+| **Performance** | 95 | **95** (LCP 2.3s, FCP 2.0s, TBT 140ms, CLS 0) |
+| **Accessibility** | 91 | **91** |
+| **Best Practices** | 100 | **100** |
+| **SEO** | 92 | **100** (Perfect 100/100) |
 | `robots-txt` | 0 (912 errors) | **1 (Valid, 0 errors)** |
 | `canonical` | Missing | **1 (Valid)** |
 | `crawlable-anchors` | 1 | **1 (Valid)** |
 
 - **Vite Production Build:** Completed successfully with 0 errors (`npm run build`).
 - **Oxlint:** 0 errors on all source files (`npm run lint`).
-- **Cloudflare Preview URL:** https://clean-audit-fix-1m1b-website.localhost-83c.workers.dev/
+- **Live Cloudflare Preview URL:** https://1m1b-website.dent-capricorn.workers.dev
+- **Branch Worker URL:** https://clean-audit-fix-1m1b-website.localhost-83c.workers.dev/
 - **Preview Smoke Checks:**
-  1. Footer `#about` link immediately opens and scrolls to the Vision & Mission section.
-  2. Navigating to `/robots.txt` returns clean plain-text directives with HTTP 200.
-  3. Mobile header, theme toggler, and tab switching operate smoothly without layout shifts.
+  1. Footer `#about` link immediately activates the home tab and smoothly scrolls to `#about` (Vision & Mission).
+  2. Navigating to `/robots.txt` returns clean plain-text directives with HTTP 200 (verified on live preview).
+  3. Canonical link and Open Graph metadata point to the valid live domain.
+  4. Office bearer cards are clean and free of non-functional placeholder links.
+  5. Zero Cumulative Layout Shift (CLS = 0) with all assets rendering crisply.
+  6. Mobile header, theme toggler, and tab switching operate smoothly without layout shifts.
