@@ -14,7 +14,7 @@ UN-accredited non-profit's university chapter at GGSIPU. Single-page tabbed layo
 (Home / Events / Team / Green Internship / Publications) with a footer, stats modal,
 event modals, and full light/dark theming.
 
-- **Live URL:** https://1m1b-website.vercel.app/ (deploys from `main`)
+- **Live URL:** Unconfirmed; the previous Vercel URL returns `404 DEPLOYMENT_NOT_FOUND`.
 - **Repo layout:** Vite root = repo root; static assets in `imgs/`, generated data in `public/`
 
 ## 2. Tech Stack
@@ -427,3 +427,12 @@ These caused real bugs; follow them to avoid re-introducing them.
   both fast-forwarded to 0597e76 ("Add Join Us tab: 10-team listing with
   photos, data-driven rendering"), so the Worker deploy picks it up.
   Note: `dist/` is gitignored — the deploy builds from source.
+- 2026-10-18 — Mobile link audit: Lighthouse on the production Vite preview
+  scored 99/100 (FCP 1.2s, LCP 1.4s, TBT 120ms, CLS 0); its render-blocking
+  resources audit reported no flagged requests, so the prior performance
+  optimizations were left intact. Fixed the footer About Us fragment
+  (`#about` → `#home`), replaced six generic LinkedIn homepage URLs on team
+  cards with matching public profiles, and removed the stale Vercel `og:url`
+  metadata. The branch also carries the working-copy SVG favicon and smaller
+  footer QR assets. The previous Vercel live URL returns `404 DEPLOYMENT_NOT_FOUND`;
+  no current Cloudflare production URL is recorded in this repository.

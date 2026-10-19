@@ -147,12 +147,18 @@ import { teams, JOIN_FORM_URL } from './teams-data.js';
     // Close mobile menu if open
     mobileNav.classList.remove('open');
 
-    // Update URL hash
+    // Update URL hash (skip appending hash for home tab)
+if (tabId === 'home') {
     if (history.pushState) {
-      history.pushState(null, null, '#' + tabId);
-    } else {
-      location.hash = '#' + tabId;
+        history.pushState(null, null, window.location.pathname);
     }
+} else {
+    if (history.pushState) {
+        history.pushState(null, null, '#' + tabId);
+    } else {
+        location.hash = '#' + tabId;
+    }
+}
   }
 
   // Desktop Navigation Event Listeners
