@@ -35,5 +35,5 @@ Additional cleanup: removed six LinkedIn buttons that pointed to the generic Lin
 ## Validation
 
 - Vite production build completed successfully.
-- Cloudflare Preview: https://codex-1m1b-mobile-audit-1m1b-website.localhost-83c.workers.dev/
+- Cloudflare Preview: https://clean-audit-fix-1m1b-website.localhost-83c.workers.dev/
 - Preview smoke-check: homepage rendered, footer “About Us” targets #about, and /robots.txt displays the expected plain-text directives.
