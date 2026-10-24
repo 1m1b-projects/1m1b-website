@@ -1,5 +1,6 @@
 import { events } from './events-data.js';
 import { teams, JOIN_FORM_URL } from './teams-data.js';
+import './event-highlights.js';
 
   // Stats Modal Logic
   const statsTrigger = document.getElementById('stats-trigger');

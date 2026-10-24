@@ -1,0 +1,32 @@
+[
+  {
+    "id": "demo-ai-workshop",
+    "title": "Demo: AI & Sustainability Workshop",
+    "date": "2026-11-10",
+    "location": "GGSIPU, Delhi",
+    "description": "Sample event data for testing the event highlights component.",
+    "image": "/imgs/Events/gen-ai.png",
+    "registrationUrl": "https://example.com/",
+    "status": "Demo data"
+  },
+  {
+    "id": "demo-llm-session",
+    "title": "Demo: Introduction to LLMs",
+    "date": "2026-11-18",
+    "location": "Online",
+    "description": "Sample session data for testing dynamic event cards.",
+    "image": "/imgs/Events/llm-workshop.png",
+    "registrationUrl": "https://example.com/",
+    "status": "Demo data"
+  },
+  {
+    "id": "demo-career-workshop",
+    "title": "Demo: Skills to Career Workshop",
+    "date": "2026-12-03",
+    "location": "GGSIPU, Delhi",
+    "description": "Sample workshop data for testing registration links.",
+    "image": "/imgs/Events/skills-to-career.png",
+    "registrationUrl": "https://example.com/",
+    "status": "Demo data"
+  }
+]
